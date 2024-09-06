@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { useStore } from '@/store/store';
 
 const CustomizationPanel = () => {
@@ -8,6 +8,7 @@ const CustomizationPanel = () => {
   const setInterval = useStore((state) => state.setInterval);
   const daysOfWeek = useStore((state) => state.daysOfWeek);
   const setDaysOfWeek = useStore((state) => state.setDaysOfWeek);
+  const [recurrenceIntervel, setRecurrenceIntervel] = useState('days')
 
   const toggleDayOfWeek = (day: number) => {
     if (daysOfWeek.includes(day)) {
@@ -16,6 +17,23 @@ const CustomizationPanel = () => {
       setDaysOfWeek([...daysOfWeek, day]);
     }
   };
+
+  useEffect(()=>{
+    switch (recurrence) {
+      case 'weekly':
+        setRecurrenceIntervel('weeks')
+        break;
+      case 'daily':
+        setRecurrenceIntervel('days')
+        break
+      case 'monthly':
+        setRecurrenceIntervel('months')
+        break
+      case 'yearly':
+        setRecurrenceIntervel('years')
+        break
+    }
+  }, [recurrence])
 
   return (
     <div className="my-4">
@@ -28,7 +46,7 @@ const CustomizationPanel = () => {
           className="w-16 p-2 border rounded"
         />
 
-        <p>Days</p>
+        <p>{recurrenceIntervel}</p>
       </div>
       {recurrence === 'weekly' && (
         <div className="mt-4">
